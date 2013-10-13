@@ -7,13 +7,14 @@ Features:
 - Five Number Summary
 - Sum and Mean
 - Sorting
+- Export the data to a Text File(.txt)
 
 Planned Features:
 - JTable
 - Standard Deviation
 - Box and Whisker Diagram
-- Reading in from a CSV
-- Exporting to a Text File or CSV
+- Reading in from a CSV and Text file (.txt)
+- Exporting to a CSV
 
 This was made in a few hours on the 24th of September 2013 (a public holiday) for fun.
 
