@@ -560,6 +560,7 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener,
 	 * that the save method uses).
 	 */
 	private void openFromFile() {
+		boolean cancelFlag = false;
 		JFileChooser chooser = new JFileChooser();
 		FileNameExtensionFilter filterTxt = new FileNameExtensionFilter(
 				"Text Files", "txt");
@@ -610,11 +611,12 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener,
 					break;
 				}
 			} else {
+				cancelFlag = true;
 				break;
 			}
 
 		}
-		if (suitableToRead == false) {
+		if (!suitableToRead && !cancelFlag) {
 			JOptionPane
 					.showMessageDialog(
 							this,
