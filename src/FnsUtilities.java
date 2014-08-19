@@ -21,7 +21,7 @@ public class FnsUtilities {
                         gui,
                         "About\n\nThis application calculates the values for the five number summary, it also calculates the Sum and Average.\n\n"
                         + "This was made in a few hours for fun on a public holiday.\n"
-                        + "Five Number Summary Calculator v1.0\n"
+                        + "Five Number Summary Calculator v1.0\n\n"
                         + "Made by Jethro Muller\n" + "September 2013",
                         "About", JOptionPane.PLAIN_MESSAGE);
     }
@@ -41,7 +41,8 @@ public class FnsUtilities {
                         + " - To sort the data click Edit > Sort Data.\n"
                         + " - To clear the data, click Edit > Clear Data."
                         + " - To save the data you have entered as a text file (.txt) click File > Save."
-                        + " - To open a text file(.txt) to import data click File > Open and then choose the appropriate file.",
+                        + " - To open a text file(.txt) to import data click \n" +
+                        " File > Open and then choose the appropriate file.",
                         "Help", JOptionPane.PLAIN_MESSAGE);
 
     }

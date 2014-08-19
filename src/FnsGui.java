@@ -28,6 +28,21 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
     private int count = 0;
     private double sum = 0;
 
+    private double median;
+    private double firstQuartile;
+    private double thirdQuartile;
+    private double max;
+    private double min;
+
+    private double lowerOutlier = 0;
+    private double upperOutlier = 0;
+
+    private double lowerStray = 0;
+    private double upperStray = 0;
+
+    ArrayList<Double> strayList = new ArrayList<Double>();
+    ArrayList<Double> outlierList = new ArrayList<Double>();
+
     private JLabel addLabel = null;
     private JTextField dataField = null;
 
@@ -42,7 +57,8 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
 
     private JButton addButton = null;
     private JButton fiveNumberSummaryButton = null;
-    private JButton otherInfoButton = null;
+    private JButton generalInfoButton = null;
+    private JButton straysAndOutlierButton = null;
 
     private List<Double> data = null;
 
@@ -168,13 +184,18 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
 
         fiveNumberSummaryButton = new JButton("Five Number Summary");
         fiveNumberSummaryButton.setActionCommand("summary");
-        fiveNumberSummaryButton.setPreferredSize(new Dimension(175, 25));
+        fiveNumberSummaryButton.setPreferredSize(new Dimension(200, 25));
         fiveNumberSummaryButton.addActionListener(this);
 
-        otherInfoButton = new JButton("Other Info");
-        otherInfoButton.setActionCommand("other");
-        otherInfoButton.setPreferredSize(new Dimension(150, 25));
-        otherInfoButton.addActionListener(this);
+        generalInfoButton = new JButton("General Info");
+        generalInfoButton.setActionCommand("general");
+        generalInfoButton.setPreferredSize(new Dimension(150, 25));
+        generalInfoButton.addActionListener(this);
+
+        straysAndOutlierButton = new JButton("Strays and Outliers");
+        straysAndOutlierButton.setActionCommand("strayandoutlier");
+        straysAndOutlierButton.setPreferredSize(new Dimension(150, 25));
+        straysAndOutlierButton.addActionListener(this);
 
         display = new JTextArea(displayHeading);
         display.setBorder(new LineBorder(Color.BLACK, 2, true));
@@ -196,7 +217,8 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
         this.getContentPane().add(dataField);
         this.getContentPane().add(addButton);
         this.getContentPane().add(fiveNumberSummaryButton);
-        this.getContentPane().add(otherInfoButton);
+        this.getContentPane().add(generalInfoButton);
+        this.getContentPane().add(straysAndOutlierButton);
         this.getContentPane().add(displayScrollPane);
 
     }
@@ -207,10 +229,17 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
 
         if (actionCommand.equals("add")) {
             addToDisplay();
+        } else if (data.size() == 0) {
+            JOptionPane.showMessageDialog(this, "No data entered yet!");
         } else if (actionCommand.equals("summary")) {
             fiveNumberSummary(data);
-        } else if (actionCommand.equals("other")) {
-            otherInfo(data);
+            showFiveNumberSummary();
+        } else if (actionCommand.equals("general")) {
+            generalInfo(data);
+        } else if (actionCommand.equals("strayandoutlier")) {
+            fiveNumberSummary(data);
+            findStraysAndOutliers();
+            showStraysAndOutliers();
         } else if (actionCommand.equals("undo")) {
             undoLast();
         } else if (actionCommand.equals("sort")) {
@@ -276,13 +305,8 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
      */
     private void fiveNumberSummary(List<Double> toCalc) {
         int n = toCalc.size() - 1;
-        double median = 0;
-        double firstQuartile = 0;
-        double thirdQuartile = 0;
-        double max = 0;
-        double min = 0;
 
-        if (! toCalc.isEmpty()) {
+        if (! toCalc.isEmpty() && n != 0) {
             Double[] numbers = toCalc.toArray(new Double[toCalc.size()]);
             Arrays.sort(numbers);
 
@@ -304,14 +328,60 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
                 thirdQuartile = getMiddleNum(Arrays.copyOfRange(numbers, ((numbers.length) / 2) +
                                                                          1, numbers.length));
             }
+        } else {
+            max = min = median = firstQuartile = thirdQuartile = toCalc.get(0);
         }
+
+        upperOutlier = median + (6 * (thirdQuartile - median));
+        lowerOutlier = median - (6 * (median - firstQuartile));
+
+        upperStray = median + (3 * (thirdQuartile - median));
+        lowerStray = median - (3 * (median - firstQuartile));
+
+        dataField.requestFocus();
+    }
+
+    private void showFiveNumberSummary() {
         String toDisplay =
                 "Minimum: %s\nFirst Quartile: %.2f\nMedian: %.2f\nThird Quartile: %.2f\nMaximum: " +
                 "%s";
         JOptionPane.showMessageDialog(this, String.format(toDisplay, min, firstQuartile, median,
                                                           thirdQuartile, max),
                                       "Five Number Summary", JOptionPane.PLAIN_MESSAGE);
-        dataField.requestFocus();
+    }
+
+    /**
+     * Finds all the strays and outliers in the dataset.
+     */
+    private void findStraysAndOutliers() {
+        for (Double dataPoint : data) {
+            System.out.println(dataPoint);
+            if (dataPoint > upperOutlier || dataPoint < lowerOutlier) {
+                outlierList.add(dataPoint);
+            } else if (dataPoint > upperStray || dataPoint < lowerStray) {
+                strayList.add(dataPoint);
+            }
+        }
+    }
+
+
+    private void showStraysAndOutliers() {
+        String strays = strayList.toString().replace("[", "").replace("]", "");
+        if (strays.equals("")) {
+            strays = "None";
+        }
+
+        String outliers = outlierList.toString().replace("[", "").replace("]", "");
+        if (outliers.equals("")) {
+            outliers = "None";
+        }
+        String strayAndOutlierText = "Strays: " + strays +
+                                     "\nUpper Stray Bound: " + upperStray +
+                                     "\nLower Stray Bound: " + lowerStray +
+                                     "\n\nOutliers: " + outliers +
+                                     "\nUpper Outlier Bound: " + upperOutlier +
+                                     "\nLower Outlier Bound: " + lowerOutlier;
+        JOptionPane.showMessageDialog(this, strayAndOutlierText);
     }
 
     /**
@@ -325,6 +395,7 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
         int middle = (num.length - 1) / 2;
 
         if (num.length % 2 == 0) {
+            System.out.println(middle);
             double num1 = num[middle];
             double num2 = num[middle + 1];
             return (num1 + num2) / 2;
@@ -360,6 +431,7 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, "The input is not valid!", "Input Error",
                                               JOptionPane.ERROR_MESSAGE);
+                dataField.setText("");
             }
         }
         dataField.requestFocus();
@@ -380,7 +452,7 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
      *
      * @param otherCalc List<Double> that is to be used to get the answers.
      */
-    private void otherInfo(List<Double> otherCalc) {
+    private void generalInfo(List<Double> otherCalc) {
         double n = 0;
         double mean = 0;
         if (! otherCalc.isEmpty()) {
