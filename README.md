@@ -12,11 +12,4 @@ Features:
 - Standard Deviation
 
 Planned Features:
-- JTable
 - Box and Whisker Diagram
-- Reading in from a CSV file
-- Exporting to a CSV
-
-This was made in a few hours on the 24th of September 2013 (a public holiday) for fun.
-
-Jethro Muller. 2013.

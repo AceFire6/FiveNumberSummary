@@ -421,11 +421,6 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
         boolean cancelFlag = false;
         JFileChooser chooser = new JFileChooser();
         FileNameExtensionFilter filterTxt = new FileNameExtensionFilter("Text Files", "txt");
-		/*
-		 * To be added soon FileNameExtensionFilter filterCsv = new
-		 * FileNameExtensionFilter("CSV Files", "csv");
-		 * chooser.setFileFilter(filterCsv);
-		 */
 
         chooser.setFileFilter(filterTxt);
         boolean suitableToRead = false;
