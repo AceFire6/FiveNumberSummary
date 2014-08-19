@@ -49,13 +49,8 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
     private FnsUtilities utility = null;
     private boolean recentlySaved = true;
 
-	/*
-	 * Laziness private static void logln(Object o) { System.out.println(o);}
-	 * private static void log(Object o) { System.out.print(o);}
-	 */
-
     /**
-     * Parameterized constructor.
+     * Parametrized constructor.
      */
     public FnsGui() {
         utility = new FnsUtilities(this);
@@ -270,6 +265,7 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
             data.clear();
         }
         count = 0;
+        sum = 0;
         dataField.requestFocus();
     }
 
