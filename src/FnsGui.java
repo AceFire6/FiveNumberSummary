@@ -355,7 +355,6 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
      */
     private void findStraysAndOutliers() {
         for (Double dataPoint : data) {
-            System.out.println(dataPoint);
             if (dataPoint > upperOutlier || dataPoint < lowerOutlier) {
                 outlierList.add(dataPoint);
             } else if (dataPoint > upperStray || dataPoint < lowerStray) {
@@ -395,7 +394,6 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
         int middle = (num.length - 1) / 2;
 
         if (num.length % 2 == 0) {
-            System.out.println(middle);
             double num1 = num[middle];
             double num2 = num[middle + 1];
             return (num1 + num2) / 2;
@@ -646,7 +644,6 @@ public class FnsGui extends JFrame implements ActionListener, KeyListener, Windo
 
             for (Double i : data) {
                 fw.append(String.valueOf(i)).append("\r\n");
-                System.out.println("Wrote: " + i);
             }
             fw.flush();
             fw.close();
