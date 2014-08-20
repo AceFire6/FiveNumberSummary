@@ -49,16 +49,6 @@ clean:
 	@$(RM) *.class
 	
 clean-jar:
-	@if [ -f ../jar/$(NAME).jar ]; then\
-		echo Removing $(NAME).jar;\
-		rm ../jar/$(NAME).jar;\
-	fi
-
-	@if [ -d ../jar/ ]; then\
-		echo Removing ../jar/;\
-		rmdir ../jar/;\
-	fi
-
 	@if [ -f MANIFEST.MF ]; then\
 		echo Removing created manifest file.;\
 		rm MANIFEST.MF;\
